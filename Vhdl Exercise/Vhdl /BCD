@@ -1,0 +1,30 @@
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity BCD_Adder is 
+
+Port ( BCD : in BIT_VECTOR (3 downto 0);
+        seg : out BIT_VECTOR(6 downto 0));
+end BCD_Adder;
+
+
+architecture Display of BCD_Adder is
+
+
+
+begin
+
+With (BCD) select 
+
+seg <= "1111110" when ("0000"),
+       "0110000" when ("0001"),
+       "1101101" when ("0010"),
+       "1111001" when ("0011"),     
+       "0110011" when ("0100"),
+       "1011011" when ("0101"),
+       "1011111" when ("0110"),
+       "1110000" when ("0111"),
+       "0000000" when others;
+
+end Display;           
