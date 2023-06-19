@@ -1,0 +1,231 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity VENDING_SAMPLE_new is
+  Port(
+    clk_in  : in std_logic;
+    reset   : in std_logic;
+    AN_IN   : out std_logic_vector(7 downto 0);
+    LED_OUT : out std_logic_vector(6 downto 0);
+    
+    SW: in std_logic_vector(2 downto 0)
+  );
+end VENDING_SAMPLE_new;
+
+architecture Behavioral of VENDING_SAMPLE_new is
+
+  signal counter : integer range 0 to 1000000 := 0;
+  signal clk_out : std_logic := '0';
+  constant DIVIDER_VALUE : integer := 1000000;
+  signal temp : integer range 0 to 9 := 0;
+
+  type StateType is (Idle, item_select, Coin, Dispense);
+  signal  next_state : StateType:= Idle;
+
+
+begin
+    process (clk_in, reset)
+         begin
+            if reset = '1' then
+                    counter <= 0;
+                    clk_out <= '0';
+            elsif rising_edge(clk_in) then
+                    if counter = DIVIDER_VALUE then
+                         counter <= 0;
+                         clk_out <= not clk_out;
+                    if temp = 9 then
+                        temp <= 0;
+                    else
+                         temp <= temp + 1;
+                     end if;
+            else
+                 counter <= counter + 1;
+                    end if;
+              end if;
+     end process;
+
+
+process (SW)
+  begin
+
+
+        case SW is
+            when "001" => next_state<= Idle;
+            when "010" => next_state<= item_select;
+            when "100" => next_state<= coin;
+            when others => next_state<= Idle;
+        end case;
+
+
+end process;
+
+
+
+process(next_state,clk_out)
+    
+    begin
+        case next_state is
+        
+            when Idle => 
+            AN_IN <= "11111101";
+            LED_OUT <= "1001111";
+            
+            when item_select => 
+   
+            AN_IN <= "11111101";
+            LED_OUT <= "0100100";
+            
+            when coin =>
+             
+            AN_IN <= "11111101";
+            LED_OUT <= "0110000";
+            
+            when others =>
+             AN_IN <= "01111111";
+            LED_OUT <= "0110000";
+            
+        end case;
+
+       
+
+end process;
+
+
+
+
+end Behavioral;
+
+
+
+
+
+
+
+
+
+
+
+
+
+--architecture Behavioral of VENDING_SAMPLE is
+--  signal counter : integer range 0 to 1000000 := 0;
+--  signal clk_out : std_logic := '0';
+--  constant DIVIDER_VALUE : integer := 1000000;
+--  signal temp : integer range 0 to 9 := 0;
+
+--  type StateType is (Idle, item_select, Coin1, Coin2, Dispense);
+ 
+-- signal  next_state : StateType:= Idle;
+--  signal concat_sw : std_logic_vector(2 downto 0);
+--  signal Price_item : std_logic_vector(2 downto 0);
+--begin
+--  process (clk_in, reset)
+--  begin
+--    if reset = '1' then
+--      counter <= 0;
+--      clk_out <= '0';
+--    elsif rising_edge(clk_in) then
+--      if counter = DIVIDER_VALUE then
+--        counter <= 0;
+--        clk_out <= not clk_out;
+--        if temp = 9 then
+--          temp <= 0;
+--        else
+--          temp <= temp + 1;
+--        end if;
+--      else
+--        counter <= counter + 1;
+--      end if;
+--    end if;
+--  end process;
+  
+--  process ( SW0, SW1, SW2, temp,next_state)
+--  begin
+    
+    
+--    case next_state is
+--      when Idle =>
+--        if SW0 = '0' and SW1 = '0' and SW2 = '1' then
+          
+--           case temp is
+--            when 0 =>
+--              AN_IN <= "11111110";
+--              LED_OUT <= "0111111"; 
+--            when 1 =>
+--              AN_IN <= "11111101";
+--              LED_OUT <= "0000110"; 
+--            when 2 =>
+--              AN_IN <= "11111011";
+--              LED_OUT <= "1011011"; 
+--            when 3 =>
+--              AN_IN <= "11110111";
+--              LED_OUT <= "1001111"; 
+--            when 4 =>  AN_IN <= "11101111";
+--              LED_OUT <= "1100110"; 
+--            when others =>
+--              AN_IN <= "11111111";
+--              LED_OUT <= "1111111"; 
+--          end case;
+--          next_state <= Coin1;
+--        end if;
+        
+--      when Coin1 =>
+--        if SW0 = '0' and SW1 = '1' and SW2 = '0' then
+--          next_state <= Coin2;
+--           case temp is
+--            when 0 =>
+--              LED_OUT <= "0111111"; 
+--            when 1 =>
+--              LED_OUT <= "0000110"; 
+--            when 2 =>
+--              LED_OUT <= "1011011"; 
+--            when 3 =>
+--              LED_OUT <= "1001111"; 
+--            when 4 =>
+--              LED_OUT <= "1100110"; 
+--            when others =>
+--              LED_OUT <= "1111111"; 
+--          end case;
+--        else
+--          next_state <= Idle;
+--        end if;
+        
+--      when Coin2 =>
+--        if SW0 = '1' and SW1 = '0' and SW2 = '0' then
+--          next_state <= Dispense;
+--          case temp is
+--          when 0 =>
+--            AN_IN <= "11111101";
+--            LED_OUT <= "1000000";
+--          when 1 =>
+--            AN_IN <= "11111101";
+--            LED_OUT <= "0100100";
+--          when 2 =>
+--            AN_IN <= "11111101";
+--            LED_OUT <= "0110000";
+--          when 3 =>
+--            AN_IN <= "11111101";
+--            LED_OUT <= "0001101";
+--          when others =>
+--            AN_IN <= "11111111";
+--            LED_OUT <= "1111111";
+--        end case;
+--        else
+--          next_state <= Idle;
+--        end if;
+        
+--      when Dispense =>
+--        if SW0 = '0' and SW1 = '1' and SW2 = '1' then
+--          next_state <= Idle;
+--        else
+--          next_state <= Dispense;
+--        end if;
+        
+--      when others =>
+--        next_state <= Idle;
+--    end case;
+--  end process;
+
+
+--end Behavioral;
