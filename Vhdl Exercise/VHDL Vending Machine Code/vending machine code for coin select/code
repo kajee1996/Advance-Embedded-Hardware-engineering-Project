@@ -1,0 +1,106 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity VENDING_SAMPLE is
+  Port(
+    clk_in  : in std_logic;
+    reset   : in std_logic;
+    AN_IN   : out std_logic_vector(7 downto 0);
+    LED_OUT : out std_logic_vector(6 downto 0);
+    
+    SW1 : in std_logic_vector (1 downto 0);
+    SW2 : in std_logic_vector (2 downto 0);
+    SW3 : in std_logic_vector (1 downto 0)
+  );
+end VENDING_SAMPLE;
+
+architecture Behavioral of VENDING_SAMPLE is
+  signal counter : integer range 0 to 1000000 := 0;
+  signal clk_out : std_logic := '0';
+  constant DIVIDER_VALUE : integer := 1000000;
+  signal temp : integer range 0 to 9 := 0;
+
+  
+begin
+  process (clk_in, reset)
+  begin
+    if reset = '1' then
+      counter <= 0;
+      clk_out <= '0';
+    elsif rising_edge(clk_in) then
+      if counter = DIVIDER_VALUE then
+        counter <= 0;
+        clk_out <= not clk_out;
+        if temp = 9 then
+          temp <= 0;
+        else
+          temp <= temp + 1;
+        end if;
+      else
+        counter <= counter + 1;
+      end if;
+    end if;
+  end process;
+  
+
+  process ( SW3,temp)
+   
+    
+
+    begin
+       AN_IN <= "11111110";
+         case SW3 is
+              when "00" =>
+                        
+                   case temp is
+                         when 0 =>
+                              
+                              LED_OUT <= "1001111"; 
+                        when others =>
+                             
+                              LED_OUT <= "1111111";
+                    end case;        
+  
+                   
+               when "01" =>
+                     
+                     case temp is
+                         when 0 =>
+                             
+                             LED_OUT <= "0100100";
+                         when others =>
+
+                             LED_OUT <= "1111111";   
+                             
+                         end case;
+                     
+                    when "10" =>
+                          case temp is
+                         when 0 =>
+                              
+                              LED_OUT <= "0110000"; 
+                        when others =>
+                             
+                              LED_OUT <= "1111111";
+                        end case;    
+
+
+                    when "11" =>
+
+                          case temp is
+                         when 0 =>
+                              
+                              LED_OUT <= "0011001"; 
+                        when others =>
+                             
+                              LED_OUT <= "1111111";
+                        end case; 
+       end case;   
+
+ 
+     
+    end process;
+  
+
+end Behavioral;
