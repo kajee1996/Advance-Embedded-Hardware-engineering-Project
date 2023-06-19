@@ -1,0 +1,88 @@
+#include <WiFiNINA.h>
+#include <PubSubClient.h>
+#include <Servo.h>
+
+const char* ssid = "Kajee06";
+const char* password = "kajee19960106";
+const char* mqtt_server = "192.168.186.1";
+const char* mqtt_username = "kajee";
+const char* mqtt_password = "1234";
+const char* mqtt_topic = "servo1";
+
+
+WiFiClient wifi_client;
+PubSubClient mqtt_client(wifi_client);
+
+
+Servo servo_motor;
+
+void setup() {
+  // Start serial communication
+  Serial.begin(9600);
+
+  // Connect to Wi-Fi network
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi");
+
+
+  mqtt_client.setServer(mqtt_server, 1883);
+  mqtt_client.setCallback(callback);
+  while (!mqtt_client.connected()) {
+    if (mqtt_client.connect("arduino", mqtt_username, mqtt_password)) {
+      Serial.println("Connected to MQTT broker");
+      mqtt_client.subscribe(mqtt_topic);
+    } else {
+      Serial.print("Failed to connect to MQTT broker, rc=");
+      Serial.println(mqtt_client.state());
+      delay(1000);
+    }
+  }
+
+
+  servo_motor.attach(9);
+}
+
+void loop() {
+  // Reconnect to MQTT broker if connection lost
+  if (!mqtt_client.connected()) {
+    reconnect();
+  }
+  mqtt_client.loop();
+}
+
+// MQTT callback function
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message received: ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+
+  // Convert payload to integer value
+  int angle = atoi((char*)payload);
+
+  // Set the angle of the servo motor
+  servo_motor.write(angle);
+
+  // Publish feedback message to MQTT broker
+  mqtt_client.publish(mqtt_topic, payload);
+}
+
+// Reconnect to MQTT broker
+void reconnect() {
+  while (!mqtt_client.connected()) {
+    Serial.println("Attempting MQTT connection...");
+    if (mqtt_client.connect("arduino", mqtt_username, mqtt_password)) {
+      Serial.println("Connected to MQTT broker");
+      mqtt_client.subscribe(mqtt_topic);
+    } else {
+      Serial.print("Failed to connect to MQTT broker, rc=");
+      Serial.println(mqtt_client.state());
+      delay(1000);
+    }
+  }
+}
