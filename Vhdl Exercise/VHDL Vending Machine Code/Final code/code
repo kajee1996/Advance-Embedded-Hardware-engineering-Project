@@ -69,6 +69,185 @@ process (SW)
 end process;
 
 
+
+   
+process ( SW2,temp)
+   
+    
+    begin
+
+
+    
+    
+    
+    
+if next_state =  item_select then      
+        case SW2 is            
+           when "000" =>
+          --------Display Cola---------                      
+                 case temp is
+                            when 0 =>
+                                 AN_IN <= "01111111";   
+                                LED_OUT <= "1000110";
+                                
+                             when 1 =>
+                                AN_IN <= "10111111";
+                                LED_OUT <= "1000000";
+                            when 2 =>
+                                AN_IN <= "11011111";
+                                LED_OUT <= "1000111";
+                            when 3 =>
+                                AN_IN <= "11101111";
+                                LED_OUT <= "0001000"; 
+                              when 4 =>
+                                AN_IN <= "11111101";
+                                LED_OUT <= "0100100"; 
+           
+                            when others =>
+                                AN_IN <= "11111111";
+                                LED_OUT <= "1111111";
+                                
+          
+                   end case;
+              when "001" =>
+       ------------------Display CHIP ------------                      
+                 case temp is
+                            when 0 =>
+                                AN_IN <= "01111111";
+                                LED_OUT <= "1000110";
+                            when 1 =>
+                                AN_IN <= "10111111";
+                                LED_OUT <= "1001001";
+                            when 2 =>
+                                AN_IN <= "11011111";
+                                LED_OUT <= "1001111";
+                            when 3 =>
+                                AN_IN <= "11101111";
+                                LED_OUT <= "0001100"; 
+                            when 4 =>
+                                AN_IN <= "11111101";
+                                LED_OUT <= "0110000"; 
+           
+                            when others =>
+                                AN_IN <= "11111111";
+                                LED_OUT <= "1111111";
+                                
+                
+                  end case;
+                             
+              when "010" =>
+              
+                         case temp is
+                             when 0 =>
+                                 AN_IN <= "01111111";
+                                 LED_OUT <= "1001111";
+                                when 1 =>
+                                 AN_IN <= "10111111";
+                                 LED_OUT <= "1000110";
+                             when 2 =>
+                                 AN_IN <= "11011111";
+                                 LED_OUT <= "0000110";
+                              when 3 =>
+                                AN_IN <= "11111101";
+                                LED_OUT <= "1001111"; 
+           
+          
+                            when others =>
+                                 AN_IN <= "11111111";
+                                 LED_OUT <= "1111111";
+                                 
+          
+                        end case;
+                                
+              when "100" =>
+                          case temp is
+                             when 0 =>
+                                AN_IN <= "01111111";
+                                LED_OUT <= "0010010";
+                             when 1 =>
+                                AN_IN <= "10111111";
+                                LED_OUT <= "1000000";
+                            when 2 =>
+                                 AN_IN <= "11011111";
+                                 LED_OUT <= "0100001";
+                             when 3 =>
+                                 AN_IN <= "11101111";
+                                 LED_OUT <= "0001000"; 
+                            when 4 =>
+                                AN_IN <= "11111101";
+                                LED_OUT <= "0011001"; 
+           
+                             when others =>
+                                 AN_IN <= "11111111";
+                                 LED_OUT <= "1111111";
+                                  
+          
+                        end case;             
+              when others =>
+                                
+                                AN_IN <= "11111111";
+                                LED_OUT <= "1111111";
+        end case;
+  
+elsif next_state =  coin then  
+ AN_IN <= "11111110";
+       
+         case SW3 is
+              when "00" =>
+              
+                   case temp is
+                         when 0 =>
+                              
+                              LED_OUT <= "1001111"; 
+                        when others =>
+                             
+                              LED_OUT <= "1111111";
+                    end case;        
+  
+                   
+               when "01" =>
+                     
+                     case temp is
+                         when 0 =>
+                             
+                             LED_OUT <= "0110000";
+                         when others =>
+
+                             LED_OUT <= "1111111";   
+                             
+                         end case;
+                     
+                    when "10" =>
+                          case temp is
+                         when 0 =>
+                              
+                              LED_OUT <= "0100100"; 
+                        when others =>
+                             
+                              LED_OUT <= "1111111";
+                        end case;    
+
+
+                    when "11" =>
+
+                          case temp is
+                         when 0 =>
+                              
+                              LED_OUT <= "0011001"; 
+                        when others =>
+                             
+                              LED_OUT <= "1111111";
+                        end case; 
+       end case;   
+
+ 
+  
+       
+
+
+  end if;   
+end process;
+
 -----------------------------dispense-------------------------
 
 
@@ -172,243 +351,6 @@ end process;
 --------------------------end dispense------------------------
 
 
-   
-process ( SW2,temp)
-   
-    
-    begin
-
-
-    
-    
-    
-    
-if next_state =  item_select then      
-        case SW2 is            
-           when "000" =>
-                                
-                 case temp is
-                            when 0 =>
-                                 AN_IN <= "01111111";   
-                                LED_OUT <= "1000110";
-                                
-                             when 1 =>
-                                AN_IN <= "10111111";
-                                LED_OUT <= "1000000";
-                            when 2 =>
-                                AN_IN <= "11011111";
-                                LED_OUT <= "1000111";
-                            when 3 =>
-                                AN_IN <= "11101111";
-                                LED_OUT <= "0001000"; 
-          
-                            when others =>
-                                AN_IN <= "11111111";
-                                LED_OUT <= "1111111";
-                                
-          
-                   end case;
-              when "001" =>
-                             
-                 case temp is
-                            when 0 =>
-                                AN_IN <= "01111111";
-                                LED_OUT <= "1011110";
-                            when 1 =>
-                                AN_IN <= "10111111";
-                                LED_OUT <= "1001100";
-                            when 2 =>
-                                AN_IN <= "11011111";
-                                LED_OUT <= "1110111";
-                            when 3 =>
-                                AN_IN <= "11101111";
-                                LED_OUT <= "0001110"; 
-          
-                            when others =>
-                                AN_IN <= "11111111";
-                                LED_OUT <= "1111111";
-                                
-                
-                  end case;
-                             
-              when "010" =>
-              
-                         case temp is
-                             when 0 =>
-                                 AN_IN <= "01111111";
-                                 LED_OUT <= "1011111";
-                                when 1 =>
-                                 AN_IN <= "10111111";
-                                 LED_OUT <= "1101100";
-                             when 2 =>
-                                 AN_IN <= "11011111";
-                                 LED_OUT <= "1110101";
-                             when 3 =>
-                                 AN_IN <= "11101111";
-                                 LED_OUT <= "1001110"; 
-          
-                            when others =>
-                                 AN_IN <= "11111111";
-                                 LED_OUT <= "1111111";
-                                 
-          
-                        end case;
-                                
-              when "100" =>
-                          case temp is
-                             when 0 =>
-                                AN_IN <= "01111111";
-                                LED_OUT <= "1011110";
-                             when 1 =>
-                                AN_IN <= "10111111";
-                                LED_OUT <= "1001100";
-                            when 2 =>
-                                 AN_IN <= "11011111";
-                                 LED_OUT <= "1110111";
-                             when 3 =>
-                                 AN_IN <= "11101111";
-                                 LED_OUT <= "0001110"; 
-          
-                             when others =>
-                                 AN_IN <= "11111111";
-                                 LED_OUT <= "1111111";
-                                  
-          
-                        end case;             
-              when others =>
-                                
-                                AN_IN <= "11111111";
-                                LED_OUT <= "1111111";
-        end case;
-  
-elsif next_state =  coin then  
- AN_IN <= "11111110";
-       
-         case SW3 is
-              when "00" =>
-              
-                   case temp is
-                         when 0 =>
-                              
-                              LED_OUT <= "1001111"; 
-                        when others =>
-                             
-                              LED_OUT <= "1111111";
-                    end case;        
-  
-                   
-               when "01" =>
-                     
-                     case temp is
-                         when 0 =>
-                             
-                             LED_OUT <= "0100100";
-                         when others =>
-
-                             LED_OUT <= "1111111";   
-                             
-                         end case;
-                     
-                    when "10" =>
-                          case temp is
-                         when 0 =>
-                              
-                              LED_OUT <= "0110000"; 
-                        when others =>
-                             
-                              LED_OUT <= "1111111";
-                        end case;    
-
-
-                    when "11" =>
-
-                          case temp is
-                         when 0 =>
-                              
-                              LED_OUT <= "0011001"; 
-                        when others =>
-                             
-                              LED_OUT <= "1111111";
-                        end case; 
-       end case;   
-
- 
-  
-       
-
-
-  end if;   
-end process;
-
-
-
-------------------------coin state-----------------------
-
-
---process (next_state,SW3,temp)
-   
-    
-
---    begin
-    
---if next_state =  coin then  
- 
-       
---         case SW3 is
---              when "00" =>
-              
---                   case temp is
---                         when 0 =>
-                              
---                              LED_OUT <= "1001111"; 
---                        when others =>
-                             
---                              LED_OUT <= "1111111";
---                    end case;        
-  
-                   
---               when "01" =>
-                     
---                     case temp is
---                         when 0 =>
-                             
---                             LED_OUT <= "0100100";
---                         when others =>
-
---                             LED_OUT <= "1111111";   
-                             
---                         end case;
-                     
---                    when "10" =>
---                          case temp is
---                         when 0 =>
-                              
---                              LED_OUT <= "0110000"; 
---                        when others =>
-                             
---                              LED_OUT <= "1111111";
---                        end case;    
-
-
---                    when "11" =>
-
---                          case temp is
---                         when 0 =>
-                              
---                              LED_OUT <= "0011001"; 
---                        when others =>
-                             
---                              LED_OUT <= "1111111";
---                        end case; 
---       end case;   
-
- 
-  
---  end if;       
---    end process;
-
-
-------------------------end coin process------------------
 
 
 
