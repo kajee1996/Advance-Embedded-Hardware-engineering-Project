@@ -22,9 +22,9 @@ end VENDING_SAMPLE_new;
 
 architecture Behavioral of VENDING_SAMPLE_new is
 
-  signal counter : integer range 0 to 1000000 := 0;
+  signal counter : integer range 0 to 100000 := 0;
   signal clk_out : std_logic := '0';
-  constant DIVIDER_VALUE : integer := 1000000;
+  constant DIVIDER_VALUE : integer := 100000;
   signal temp : integer range 0 to 9 := 0;
 
   type StateType is (Idle, item_select, Coin, Dispense);
@@ -210,7 +210,7 @@ elsif next_state =  coin then
                      case temp is
                          when 0 =>
                              
-                             LED_OUT <= "0110000";
+                             LED_OUT <= "0100100";
                          when others =>
 
                              LED_OUT <= "1111111";   
@@ -221,7 +221,7 @@ elsif next_state =  coin then
                           case temp is
                          when 0 =>
                               
-                              LED_OUT <= "0100100"; 
+                              LED_OUT <= "0110000"; 
                         when others =>
                              
                               LED_OUT <= "1111111";
@@ -238,13 +238,105 @@ elsif next_state =  coin then
                              
                               LED_OUT <= "1111111";
                         end case; 
+                        
+                         AN_IN <= "11111111";
+                           
+                                LED_OUT <= "1111111";  
+                             
        end case;   
 
+ elsif next_state =  dispense then 
+ 
+     case SW4 is 
+   when '1' =>
+  -- LED <= '1';
+             case SW2 is 
+               when "000" =>
+                    case SW3 is
+                     
+                      when "01" =>
+                          
+                             AN_IN <= "11111101";
+                                LED_OUT <= "1000000";  
+                      when "10" =>
+                        
+                          AN_IN <= "11111101";
+                          LED_OUT <= "1001111";  
+                      when "11" =>
+                          
+                             AN_IN <= "11111101";
+                                LED_OUT <= "0100100";  
+                      when others =>
+                          
+                            AN_IN <= "11111111";
+                                LED_OUT <= "1111111"; 
+                    end case;
+             when "001" =>
+                    case SW3 is 
+                    
+                      when "11" =>
+--                          LED_G <= '1';
+--                          LED_R <= '0';
+                              AN_IN <= "11111101";
+                                LED_OUT <= "1000000";
+                      when others =>
+                            AN_IN <= "11111111";
+                                LED_OUT <= "1111111"; 
+                    end case;
+            when "010" =>
+                    case SW3 is 
+                     
+                       when "00" =>
+                          
+                             AN_IN <= "11111101";
+                                LED_OUT <= "1000000";  
+                         when "01" =>
+                           AN_IN <= "11111101";
+                                LED_OUT <= "1001111";
+                                         
+                      when "10" =>
+                            AN_IN <= "11111101";
+                                LED_OUT <= "0100100";
+                      when "11" =>
+                          AN_IN <= "11111101";
+                                LED_OUT <= "0110000";
+                      when others =>
+                         
+                           AN_IN <= "11111111";
+                                LED_OUT <= "1111111";
+                                
+                    end case; 
+            when "100" =>
+                    case SW3 is 
+                       when "10" =>
+                           AN_IN <= "11111101";
+                                LED_OUT <= "1000000";
+                                
+                      when "11" =>
+                          
+                           AN_IN <= "11111101";
+                                LED_OUT <= "1001111";
+                                
+                      when others =>
+                          
+                           AN_IN <= "11111111";
+                                LED_OUT <= "1111111";
+                                 
+                    end case; 
+            when others =>
+                 
+                      AN_IN <= "11111111";
+                                LED_OUT <= "1111111";  
+
+            end case;
+  when others =>
+    --       LED <= '0';
+           
+          
+                
+   end case;
  
   
-       
-
-
   end if;   
 end process;
 
